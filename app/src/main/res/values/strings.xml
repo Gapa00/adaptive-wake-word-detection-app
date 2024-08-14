@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">AdaptiveWakeWordDetectionApp</string>
+    <string name="notification_channel_name">Wake Word Service Channel</string>
+    <string name="channel_id">RecordingServiceChannel</string>
+    <string name="notification_title">Wake Word Detection</string>
+    <string name="notification_text">Detecting Wake Words…</string>
+    <string name="new_detection">Detected word: </string>
+
+    <string name="detected_text">Detected: %1$s</string>
+    <string name="likelihood_text">Likelihood: %1$s</string>
+
+    <string name="model_tiny">ModelTiny.tflite</string>
+    <string name="model_medium">ModelMedium.tflite</string>
+    <string name="model_big">ModelBig.tflite</string>
+
+    <string name="action">ACTION</string>
+    <string name="action_start">START</string>
+    <string name="action_stop">STOP</string>
+    <string name="detection_results">detectionResults</string>
+
+
+
+
+
+</resources>
