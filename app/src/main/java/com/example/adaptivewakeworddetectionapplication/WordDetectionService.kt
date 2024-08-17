@@ -177,7 +177,7 @@ class WordDetectionService : Service() {
                     totalSamplesRead = 0
                     val currentTime = System.currentTimeMillis()
                     val nrg = calculateEnergy(recordingBuffer)
-                    if ((nrg > energyThreshold) && currentTime - lastClassificationTime > 3000) {
+                    if ((nrg > energyThreshold) && currentTime - lastClassificationTime > 2000) {
                         val detectionResult = modelController.processShiftedWindows(recordingBuffer)
                         if (detectionResult != null && detectionResult.likelihoods[0] > likelihoodThreshold) {
                             modelController.updateLastKperformances(detectionResult.likelihoods[0])
