@@ -100,11 +100,6 @@ class WordDetectionService : Service() {
             energyThreshold = it.getFloatExtra("ENERGY_THRESHOLD", 0.01f)
             likelihoodThreshold = it.getFloatExtra("MIN_LIKELIHOOD_THRESHOLD", 80.0f) / 100.0f
 
-            // Log the values or use them as needed
-            Log.d("WordDetectionService", "Action: $action")
-            Log.d("WordDetectionService", "energyThreshold $energyThreshold")
-            Log.d("WordDetectionService", "likelihoodThreshold: $likelihoodThreshold")
-
             when (action) {
                 "START" -> startRecording()
                 "STOP" -> stopRecording()
