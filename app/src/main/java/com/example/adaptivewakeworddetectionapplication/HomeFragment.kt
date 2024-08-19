@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adaptivewakeworddetectionapplication.databinding.FragmentHomeBinding
@@ -21,20 +22,26 @@ import com.google.gson.reflect.TypeToken
 
 class HomeFragment : Fragment() {
 
-    private var isServiceRunning: Boolean = false
-
     private lateinit var binding: FragmentHomeBinding
     private var sharedPreferences: SharedPreferences? = null
 
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
     private lateinit var detectionResultAdapter: DetectionResultAdapter
     private var detectionResults = mutableListOf<DetectionResult>()
+
+    var energyThresh: Float = 0.01f
+    var likelihoodThresh: Float = 80.0f
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = activity?.let { PreferenceManager.getDefaultSharedPreferences(it) }
+//        sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
+
         detectionResultAdapter = DetectionResultAdapter(detectionResults)
         registerReceiver()
+
     }
 
     override fun onCreateView(
@@ -46,14 +53,26 @@ class HomeFragment : Fragment() {
         binding.recyclerView.adapter = detectionResultAdapter
 
         loadHistoricalData()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        energyThresh = sharedPreferences?.getFloat(R.string.settings_slider.toString(), 0.01f)!!
+        likelihoodThresh = sharedPreferences?.getFloat(R.string.settings_input.toString(), 80.0f)!!
+
+        // Observe the state from the ViewModel
+        sharedViewModel.isServiceRunning.observe(viewLifecycleOwner) { isRunning ->
+            binding.btnRecord.setImageResource(
+                if (isRunning) R.drawable.baseline_mic_off_24 else R.drawable.baseline_mic_24
+            )
+        }
+
         binding.btnRecord.setOnClickListener {
-            if (isServiceRunning) {
+            val isRunning = sharedViewModel.isServiceRunning.value ?: false
+            if (isRunning) {
                 binding.btnRecord.setImageResource(R.drawable.baseline_mic_24)
                 stopRecordingService()
             } else {
@@ -66,9 +85,13 @@ class HomeFragment : Fragment() {
     private fun startRecordingService() {
         val serviceIntent = Intent(activity, WordDetectionService::class.java).apply {
             putExtra("ACTION", "START")
+            putExtra("ENERGY_THRESHOLD", energyThresh)
+            putExtra("MIN_LIKELIHOOD_THRESHOLD", likelihoodThresh)
         }
+
         activity?.startService(serviceIntent)
-        isServiceRunning = true
+        sharedViewModel.setServiceRunning(true)
+
     }
 
     private fun stopRecordingService() {
@@ -76,7 +99,7 @@ class HomeFragment : Fragment() {
             putExtra("ACTION", "STOP")
         }
         activity?.startService(serviceIntent)
-        isServiceRunning = false
+        sharedViewModel.setServiceRunning(false)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">AdaptiveWakeWordDetectionApp</string>
+    <string name="app_name">Adaptive Wake Word Detection</string>
     <string name="notification_channel_name">Wake Word Service Channel</string>
     <string name="channel_id">RecordingServiceChannel</string>
-    <string name="notification_title">Wake Word Detection</string>
     <string name="notification_text">Detecting Wake Words…</string>
     <string name="new_detection">Detected word: </string>
 
     <string name="detected_text">Detected: %1$s</string>
     <string name="likelihood_text">Likelihood: %1$s</string>
+    <string name="timestamp_text">Timestamp</string>
 
     <string name="model_tiny">ModelTiny.tflite</string>
     <string name="model_medium">ModelMedium.tflite</string>
@@ -17,6 +17,17 @@
     <string name="action_start">START</string>
     <string name="action_stop">STOP</string>
     <string name="detection_results">detectionResults</string>
+    <string name="recording_desc">Record / Stop recording</string>
+
+
+<!--    <string name="preferences_name">appPref</string>-->
+    <string name="settings_desc">Settings</string>
+    <string name="settings_slider">slider_value</string>
+    <string name="settings_input">text_value</string>
+    <string name="settings_text_energy">Sound Energy Threshold:</string>
+    <string name="settings_energy_default">80.0</string>
+    <string name="settings_text_likelihood">Minimal Likelihood Threshold:</string>
+    <string name="settings_update">UPDATE</string>
 
 
 

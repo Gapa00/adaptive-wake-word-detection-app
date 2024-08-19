@@ -29,25 +29,25 @@
                 android:id="@+id/tvClassLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Class Label"
+                android:text="@string/detected_text"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvLikelihood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Likelihood"
+                android:text="@string/likelihood_text"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tvTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Timestamp"
-            android:textSize="18sp"
+            android:text="@string/timestamp_text"
+            android:textSize="19sp"
             android:layout_marginEnd="18dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"

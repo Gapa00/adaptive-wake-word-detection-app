@@ -6,7 +6,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -20,13 +22,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class WordDetectionService : Service() {
 
-    private var energyThreshold = 0.01
-    private var likelihoodThreshold = 0.8
+    private var energyThreshold = 0.03f
+    private var likelihoodThreshold = 0.8f
     private var recordingBufferSize = 0
     private var audioRecord: AudioRecord? = null
     private var audioRecordingThread: Thread? = null
     private var isRecording: Boolean = false
     private var notificationBuilder: NotificationCompat.Builder? = null
+
+    private lateinit var sharedViewModel: SharedViewModel
 
     private lateinit var modelController: ModelController
 
@@ -62,7 +66,7 @@ class WordDetectionService : Service() {
 
     private fun createNotification(): Notification {
         val builder = NotificationCompat.Builder(this, R.string.channel_id.toString())
-            .setContentTitle(getString(R.string.notification_title))
+            .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notification_text))
             .setSmallIcon(R.drawable.baseline_mic_24)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -93,6 +97,14 @@ class WordDetectionService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             val action = it.getStringExtra("ACTION")
+            energyThreshold = it.getFloatExtra("ENERGY_THRESHOLD", 0.01f)
+            likelihoodThreshold = it.getFloatExtra("MIN_LIKELIHOOD_THRESHOLD", 80.0f) / 100.0f
+
+            // Log the values or use them as needed
+            Log.d("WordDetectionService", "Action: $action")
+            Log.d("WordDetectionService", "energyThreshold $energyThreshold")
+            Log.d("WordDetectionService", "likelihoodThreshold: $likelihoodThreshold")
+
             when (action) {
                 "START" -> startRecording()
                 "STOP" -> stopRecording()

@@ -4,9 +4,13 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentTransaction
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +21,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         permissionManager = PermissionManager(this)
 
@@ -29,6 +36,32 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.POST_NOTIFICATIONS,
                 Manifest.permission.FOREGROUND_SERVICE_MICROPHONE)
         }
+
+        val btnSettings: ImageButton = findViewById(R.id.btnSettings)
+        btnSettings.setOnClickListener {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+
+            if (currentFragment is SettingsFragment) {
+                // If the current fragment is SettingsFragment, navigate back to HomeFragment
+                supportFragmentManager.popBackStack()
+            } else {
+                // If the current fragment is not SettingsFragment, navigate to SettingsFragment
+                openSettingsFragment()
+            }
+        }
+    }
+
+    private fun openSettingsFragment() {
+        val settingsFragment = SettingsFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerView, settingsFragment)
+            .addToBackStack(null)
+//            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .commit()
+    }
+
+    fun returnToHomeFragment() {
+        supportFragmentManager.popBackStack()
     }
 
     override fun onRequestPermissionsResult(

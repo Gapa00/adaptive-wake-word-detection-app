@@ -27,6 +27,7 @@
         android:backgroundTint="@color/salmon"
         android:padding="20dp"
         android:src="@drawable/baseline_mic_24"
+        android:contentDescription="@string/recording_desc"
         app:borderWidth="0dp"
         app:elevation="10dp"
         app:fabCustomSize="80dp"
